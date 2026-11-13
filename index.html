@@ -49,7 +49,13 @@
   .stat:active{transform:translateY(1px)}
   .stat:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
   @media (max-width:620px){ .stats{grid-template-columns:1fr 1fr} }
-  #projects,#waiting-on-you,#live-pages,#watches{scroll-margin-top:14px}
+  #projects,#waiting-on-you,#live-pages,#watches,#feature-pages,#excel-files,#todo-lists,#landing-pages{scroll-margin-top:14px}
+  .tab-intro{font-size:.9rem;color:var(--muted);margin:14px 0 0}
+  .tab-intro strong{color:var(--ink)}
+  .file-badge{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;background:var(--surface2);border:1px solid var(--line);border-radius:999px;padding:4px 9px;color:var(--ink)}
+  .pill.excel{background:#e2efe6;color:#2f5d3a}
+  @media (prefers-color-scheme: dark){ .pill.excel{background:#223626;color:#a8c39a} }
+  .pill.todo{background:var(--gold-bg);color:var(--gold)}
 
   /* Needs attention */
   .attention{margin:18px 0 4px;background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow)}
@@ -175,11 +181,12 @@
   </header>
 
   <div class="stats" aria-label="Overview — tap a card to jump to that section">
-    <a class="stat" href="#projects" aria-label="27 projects tracked — jump to all projects"><b>27</b><span>Projects tracked</span></a>
-    <a class="stat" href="#live-pages" aria-label="2 pages live now — jump to Books and Sims Builds, where the live pages are"><b>2</b><span>Pages live now</span></a>
-    <a class="stat" href="#waiting-on-you" aria-label="4 waiting on you — jump to Needs your call"><b>4</b><span>Waiting on you</span></a>
+    <a class="stat" href="#projects" aria-label="37 projects tracked — jump to all projects"><b>37</b><span>Projects tracked</span></a>
+    <a class="stat" href="#live-pages" aria-label="5 pages built — jump to Books and Sims Builds, where the live pages are"><b>5</b><span>Pages built</span></a>
+    <a class="stat" href="#waiting-on-you" aria-label="3 waiting on you — jump to Needs your call"><b>3</b><span>Waiting on you</span></a>
     <a class="stat" href="#watches" aria-label="3 watches running — jump to Watches and Weekly Routines"><b>3</b><span>Watches running</span></a>
   </div>
+  <p class="tab-intro"><strong>New tabs below:</strong> use <strong>Feature Pages</strong> for your three feature pages (and any we make next), <strong>Landing Pages</strong> for every built page in one view, <strong>Excel Files</strong> for spreadsheets, and <strong>To-Do Lists</strong> for checklists. Tap a tab to filter — tap <strong>All projects</strong> to see everything again.</p>
 
   <section class="questions" id="questions" aria-labelledby="questions-h">
     <h2 id="questions-h">Copy &amp; paste questions</h2>
@@ -191,11 +198,6 @@
         <span class="q-label">Talc notarization</span>
         <p class="q-wording">Are you ready to do the online notary session for your mom's talc case opt-in? It's the only step left — and we'll walk through it together, step by step.</p>
         <div class="copy-row"><p class="copy-text" id="copy-talc">Talc notarization — ready to do the online notary session? My answer: </p><button type="button" class="copy-btn" data-copy="copy-talc">Copy</button></div>
-      </li>
-      <li class="q-item" id="q-basil">
-        <span class="q-label">Basil — Finance Assistant salary</span>
-        <p class="q-wording">For the Basil Finance Assistant role in Orchard Park: do you confirm the salary answer, so the application can go out? If you'd rather use a different answer, paste that one instead.</p>
-        <div class="copy-row"><p class="copy-text" id="copy-basil">Basil Finance Assistant — salary answer: confirmed / use this instead: </p><button type="button" class="copy-btn" data-copy="copy-basil">Copy</button></div>
       </li>
       <li class="q-item" id="q-feedback">
         <span class="q-label">Feedback on the three feature pages</span>
@@ -245,7 +247,6 @@
     <h2 id="quick-h">Knock it out in 10 minutes</h2>
     <p>Got a free 10 minutes? Everything here takes 10 minutes or less and is ready to go right now — no asking, no hunting. Where an answer is needed, the exact question is written out in the Copy &amp; paste questions section above.</p>
     <ul>
-      <li><span class="q-text"><strong>Confirm the Basil salary answer</strong> — one confirmation and the Finance Assistant application can go out.<span class="q-time">About 2 minutes</span></span><a class="act" href="#q-basil">See the question ↓</a></li>
       <li><span class="q-text"><strong>Give feedback on the three feature pages</strong> — what lands, what doesn't, what to change.<span class="q-time">About 5–10 minutes</span></span><a class="act" href="#q-feedback">See the question ↓</a></li>
       <li><span class="q-text"><strong>Order the TADC Pomni &amp; Jax plushes</strong> — $30 each at the official Glitch store; Jax is on the same store. Order soon — Glitch fulfillment is slow.<span class="q-time">About 5 minutes</span></span><a class="act" href="https://glitchproductions.store/products/pomni-plush">Order the plushes →</a></li>
       <li><span class="q-text"><strong>Book Kelsey's road test</strong> — ready now with permit ID + date of birth + ZIP.<span class="q-time">About 5–10 minutes</span></span><a class="act" href="https://dmv.ny.gov/roadtest">Book at dmv.ny.gov →</a></li>
@@ -263,11 +264,15 @@
     </ul>
   </section>
 
-  <div class="filters" id="projects" role="group" aria-label="Filter projects">
-    <button type="button" data-filter="all" aria-pressed="true">All projects</button>
-    <button type="button" data-filter="attention" aria-pressed="false">Needs attention</button>
-    <button type="button" data-filter="live" aria-pressed="false">Live pages</button>
-    <button type="button" data-filter="running" aria-pressed="false">Running</button>
+  <div class="filters" id="projects" role="tablist" aria-label="Filter projects — tabs">
+    <button type="button" role="tab" data-filter="all" aria-pressed="true">All projects</button>
+    <button type="button" role="tab" data-filter="attention" aria-pressed="false">Needs attention</button>
+    <button type="button" role="tab" data-filter="live" aria-pressed="false">Live pages</button>
+    <button type="button" role="tab" data-filter="running" aria-pressed="false">Running</button>
+    <button type="button" role="tab" data-filter="feature" aria-pressed="false">Feature Pages</button>
+    <button type="button" role="tab" data-filter="landing" aria-pressed="false">Landing Pages</button>
+    <button type="button" role="tab" data-filter="excel" aria-pressed="false">Excel Files</button>
+    <button type="button" role="tab" data-filter="todo" aria-pressed="false">To-Do Lists</button>
   </div>
   <div class="empty-filter" id="emptyFilter">Nothing matches that filter in this view.</div>
 
@@ -356,13 +361,13 @@
         </article>
 
         <article class="card" data-tags="attention">
-          <div class="card-top"><h3>Basil</h3><span class="pill attention">Needs your OK first</span></div>
+          <div class="card-top"><h3>Basil</h3><span class="pill waiting">Ready to send</span></div>
           <p><strong>Finance Assistant — Orchard Park</strong></p>
-          <p>Status: not applied yet — held until you confirm one answer.</p>
+          <p>Status: not applied yet — <strong>salary confirmed: $60,000–$64,000</strong>. Nothing is waiting on you for this one anymore.</p>
           <p>Tailored résumé and cover letter are ready with Dash in chat.</p>
-          <p class="next"><strong>Next action:</strong> confirm the salary answer first — the question is written out in full in the Copy &amp; paste questions at the top — then apply.</p>
-          <div class="act-row"><a class="act" href="#q-basil">See the question ↓</a><a class="act secondary" href="https://www.basilcars.com/basil-jobs/">View the job posting →</a></div>
-          <div class="meta"><span class="updated">Updated Nov 13, 2026</span></div>
+          <p class="next"><strong>Next action:</strong> check the listing on basiljobs.com, then apply with the confirmed $60,000–$64,000 salary.</p>
+          <div class="act-row"><a class="act" href="https://basiljobs.com">Check the listing on basiljobs.com →</a><a class="act secondary" href="#q-resumes">Copy the résumé request ↓</a></div>
+          <div class="meta"><span class="updated">Salary confirmed Nov 13, 2026</span></div>
         </article>
 
       </div>
@@ -373,18 +378,18 @@
   <details class="cat" id="live-pages" open data-cat>
     <summary><span class="cat-title">Books &amp; Sims Builds</span><span class="cat-count">3 projects</span><span class="chev" aria-hidden="true">▾</span></summary>
     <div class="cat-body">
-      <p class="cat-note">The Plated Prisoner world, built two ways — as Sims lots you can build yourself, and as chapter-by-chapter story pages.</p>
+      <p class="cat-note">The Plated Prisoner world, built two ways — as Sims lots you can build yourself, and as chapter-by-chapter story pages. Both live pages here also appear under the <strong>Landing Pages</strong> tab, together with the Feature Pages.</p>
       <div class="grid">
 
-        <article class="card" data-tags="live">
-          <div class="card-top"><h3>Plated Prisoner Sims Builds</h3><span class="pill live">Live</span></div>
+        <article class="card" data-tags="live landing">
+          <div class="card-top"><h3>Plated Prisoner Sims Builds</h3><span class="pill live">Live · Landing Page</span></div>
           <p>All <strong>30 places</strong> from the series as Sims builds — 6 tour clips, gallery sliders, a floor plan for every floor, and build tips, with a “Built it” tracker on each place.</p>
           <a class="open-link" href="https://muse.ai/s/plated-prisoner-sims-builds-lm6i5myxxxmxyxx/cw1ICuPF4BVZ7eH6qh-k987M1kUxXOxrYVga4uMa09U">Open the builds page →</a>
           <div class="meta"><span class="updated">Updated Nov 13, 2026</span><span>6 books · 30 places</span></div>
         </article>
 
-        <article class="card" data-tags="live">
-          <div class="card-top"><h3>Gild — Chapter by Chapter</h3><span class="pill live">Live</span></div>
+        <article class="card" data-tags="live landing">
+          <div class="card-top"><h3>Gild — Chapter by Chapter</h3><span class="pill live">Live · Landing Page</span></div>
           <p>Book 1 walked through in full: <strong>all 40 chapters</strong> plus the closing poem, each with its major scenes and why they matter — 103 scene checkboxes to track where you are.</p>
           <a class="open-link" href="https://muse.ai/s/gild-chapter-by-chapter-zy6i5t7t9dxh/KW6_nB0FgP6l9Hc6bliiKvVHRKOAbKxkQBLwyuxOLk4">Open Gild →</a>
           <div class="meta"><span class="updated">Updated Nov 13, 2026</span><span>40 chapters · 103 scenes</span></div>
@@ -402,14 +407,14 @@
   </details>
 
   <!-- FEATURE PAGES -->
-  <details class="cat" open data-cat>
-    <summary><span class="cat-title">Your Three Feature Pages</span><span class="cat-count">3 projects</span><span class="chev" aria-hidden="true">▾</span></summary>
+  <details class="cat" id="feature-pages" open data-cat>
+    <summary><span class="cat-title">Feature Pages</span><span class="cat-count">3 pages · tab: Feature Pages</span><span class="chev" aria-hidden="true">▾</span></summary>
     <div class="cat-body">
-      <p class="cat-note">Built November 12. All three are waiting on your feedback — what lands, what doesn't, what to change.</p>
+      <p class="cat-note">Built November 12. All three are waiting on your feedback — what lands, what doesn't, what to change. <strong>This is the home for feature pages going forward</strong> — any new feature page we make gets a card here and shows up under the <strong>Feature Pages</strong> and <strong>Landing Pages</strong> tabs.</p>
       <div class="grid">
 
-        <article class="card" data-tags="attention">
-          <div class="card-top"><h3>Fun &amp; Creative</h3><span class="pill waiting">Feedback pending</span></div>
+        <article class="card" data-tags="attention feature landing todo">
+          <div class="card-top"><h3>Fun &amp; Creative</h3><span class="pill waiting">Feature Page · Feedback pending</span></div>
           <p>Your creative side in one page — Sims, books, and the projects that are actually for <em>you</em>.</p>
           <ul class="checks" data-checks>
             <li><label><input type="checkbox"><span>Look it over</span></label></li>
@@ -419,8 +424,8 @@
           <div class="meta"><span class="updated">Built Nov 12, 2026</span><span class="progress" data-progress></span></div>
         </article>
 
-        <article class="card" data-tags="attention">
-          <div class="card-top"><h3>Everyday Life, Easier</h3><span class="pill waiting">Feedback pending</span></div>
+        <article class="card" data-tags="attention feature landing todo">
+          <div class="card-top"><h3>Everyday Life, Easier</h3><span class="pill waiting">Feature Page · Feedback pending</span></div>
           <p>The low-friction page — the routines, reminders, and shortcuts set up to make daily life take less out of you.</p>
           <ul class="checks" data-checks>
             <li><label><input type="checkbox"><span>Look it over</span></label></li>
@@ -430,8 +435,8 @@
           <div class="meta"><span class="updated">Built Nov 12, 2026</span><span class="progress" data-progress></span></div>
         </article>
 
-        <article class="card" data-tags="attention">
-          <div class="card-top"><h3>Money &amp; the Future</h3><span class="pill waiting">Feedback pending</span></div>
+        <article class="card" data-tags="attention feature landing todo">
+          <div class="card-top"><h3>Money &amp; the Future</h3><span class="pill waiting">Feature Page · Feedback pending</span></div>
           <p>The longer view — side income, the future you're picturing for the family, and the steps toward it.</p>
           <ul class="checks" data-checks>
             <li><label><input type="checkbox"><span>Look it over</span></label></li>
@@ -451,7 +456,7 @@
     <div class="cat-body">
       <div class="grid">
 
-        <article class="card" data-tags="">
+        <article class="card" data-tags="excel">
           <div class="card-top"><h3>Work Training Guides</h3><span class="pill live">Current</span></div>
           <p>The full set, kept current as each day's training lessons come in: <strong>Product Pages, Training Guide, and Cases Playbook</strong>, plus the combined Word file (sheets 00–12). Every update resends all four.</p>
           <div class="act-row"><a class="act" href="#q-training">Copy the request ↓</a></div>
@@ -468,7 +473,7 @@
     <div class="cat-body">
       <div class="grid">
 
-        <article class="card" data-tags="">
+        <article class="card" data-tags="todo">
           <div class="card-top"><h3>Sims 4 Mod Maintenance</h3><span class="pill live">Done</span></div>
           <p>Game is on <strong>patch 1.129</strong> and the mod tracker is rebuilt (10,794 files). The one outstanding fix is <strong>done</strong> — Tralfaz_GhostBusting.package pulled, localthumbcache deleted, and the reload confirmed the exception is gone:</p>
           <ul class="checks" data-checks>
@@ -479,7 +484,7 @@
           <div class="meta"><span class="updated">Updated Nov 13, 2026</span><span class="progress" data-progress></span></div>
         </article>
 
-        <article class="card" data-tags="running">
+        <article class="card" data-tags="running todo">
           <div class="card-top"><h3>Gmail Inbox Cleanup</h3><span class="pill running">Running</span></div>
           <p>The newest 279 messages are reviewed and <strong>71 clear junk emails are queued to trash Friday, Nov 13 at ~9:40am</strong>. After that, the remaining ~2,700 older messages get worked through in daily batches, newest first, junk only — November mail stays.</p>
           <ul class="checks" data-checks>
@@ -501,7 +506,7 @@
     <div class="cat-body">
       <div class="grid">
 
-        <article class="card" data-tags="running">
+        <article class="card" data-tags="running todo">
           <div class="card-top"><h3>Christmas Shopping</h3><span class="pill running">In progress</span></div>
           <p>Lists are <strong>in for both girls</strong> — Taylor's 18 items and Kelsey's 7 Amazon picks below, plus Raccoon Island added Oct 28. Every item is one tap from its product page.</p>
           <p><strong>Kelsey's picks — tap to open on Amazon:</strong></p>
@@ -526,7 +531,7 @@
           <div class="meta"><span class="updated">Updated Nov 13, 2026</span><span class="progress" data-progress></span></div>
         </article>
 
-        <article class="card" data-tags="attention">
+        <article class="card" data-tags="attention todo">
           <div class="card-top"><h3>Camper Insurance</h3><span class="pill attention">No coverage</span></div>
           <p>The camper — 2018 Forest River — <strong>still has no insurance coverage</strong>. A one-page call cheat sheet with the VIN and what to say is ready, so the call itself is the only step left: your Allstate agent, <strong>Michael Barends</strong>.</p>
           <ul class="checks" data-checks>
@@ -537,7 +542,7 @@
           <div class="meta"><span class="updated">Cheat sheet ready Oct 15, 2026</span><span class="progress" data-progress></span></div>
         </article>
 
-        <article class="card" data-tags="attention">
+        <article class="card" data-tags="attention todo">
           <div class="card-top"><h3>Talc Case Notarization</h3><span class="pill attention">One step left</span></div>
           <p>For your mom's talc case, everything is done except the <strong>online notary session</strong> for the opt-in. It's the last step — and the one you've been dreading, which is exactly why it's at the top of the list, not buried. Open chat and we'll walk through it together, step by step.</p>
           <ul class="checks" data-checks>
@@ -547,7 +552,7 @@
           <div class="meta"><span class="updated">Updated Nov 11, 2026</span><span class="progress" data-progress></span></div>
         </article>
 
-        <article class="card" data-tags="attention">
+        <article class="card" data-tags="attention todo">
           <div class="card-top"><h3>Kelsey's Road Test</h3><span class="pill waiting">Ready to book</span></div>
           <p>The 5-hour course is done (Oct 14) and reported to the DMV the same day, so the road test <strong>can be booked right now</strong> — online at dmv.ny.gov/roadtest, or by phone at 1-518-402-2100. On test day: the physical MV-278 plus the signed MV-262 50-hour log.</p>
           <ul class="checks" data-checks>
@@ -602,7 +607,7 @@
           <div class="meta"><span class="updated">Running through Dec 1, 2026</span></div>
         </article>
 
-        <article class="card" data-tags="running">
+        <article class="card" data-tags="running todo">
           <div class="card-top"><h3>NFL Weekly Picks</h3><span class="pill running">Running</span></div>
           <p>Predictions land Thursday mornings and results with accuracy on Monday mornings, both emailed to your work inbox. <strong>Week 10 is delivered.</strong> Runs through the Super Bowl — curiosity only, no gambling.</p>
           <ul class="checks" data-checks>
@@ -624,9 +629,139 @@
     </div>
   </details>
 
+  <!-- LANDING PAGES INDEX -->
+  <section class="questions" id="landing-pages" aria-labelledby="landing-h" style="margin-top:26px">
+    <h2 id="landing-h" style="font-family:'Iowan Old Style',Georgia,serif;margin:0 0 6px;font-size:1.35rem">Landing Pages — every built page in one place</h2>
+    <p class="q-intro">Tap the <strong>Landing Pages</strong> tab above to filter the hub down to just these pages, or open one directly here. <strong>Any new landing page we build gets added to this list</strong> and to the tab.</p>
+    <ul class="shop-list">
+      <li><span><strong>Plated Prisoner Sims Builds</strong> — 30 places, 6 books</span><a href="https://muse.ai/s/plated-prisoner-sims-builds-lm6i5myxxxmxyxx/cw1ICuPF4BVZ7eH6qh-k987M1kUxXOxrYVga4uMa09U">Open →</a></li>
+      <li><span><strong>Gild — Chapter by Chapter</strong> — Book 1, 40 chapters</span><a href="https://muse.ai/s/gild-chapter-by-chapter-zy6i5t7t9dxh/KW6_nB0FgP6l9Hc6bliiKvVHRKOAbKxkQBLwyuxOLk4">Open →</a></li>
+      <li><span><strong>Fun &amp; Creative</strong> — feature page, built Nov 12</span><a href="#feature-pages">View card ↓</a></li>
+      <li><span><strong>Everyday Life, Easier</strong> — feature page, built Nov 12</span><a href="#feature-pages">View card ↓</a></li>
+      <li><span><strong>Money &amp; the Future</strong> — feature page, built Nov 12</span><a href="#feature-pages">View card ↓</a></li>
+      <li><span><strong>Home (this hub)</strong> — also live on GitHub Pages at beethequeen11.github.io</span><a href="https://beethequeen11.github.io/">Open →</a></li>
+    </ul>
+    <p class="q-intro" style="margin-top:10px">Not started yet: <strong>Glint — Chapter by Chapter</strong> (Book 2) — its card is in Books &amp; Sims Builds above.</p>
+  </section>
+
+  <!-- EXCEL FILES -->
+  <details class="cat" id="excel-files" open data-cat>
+    <summary><span class="cat-title">Excel Files</span><span class="cat-count">6 files · tab: Excel Files</span><span class="chev" aria-hidden="true">▾</span></summary>
+    <div class="cat-body">
+      <p class="cat-note">Every spreadsheet in one tab — tap <strong>Excel Files</strong> above to see just these. Files live with Dash in chat / your files, not as downloads on this page: use the copy-ready request on a card, or just ask in chat and it gets sent. <strong>New spreadsheets get a card here as we make them.</strong></p>
+      <div class="grid">
+
+        <article class="card" data-tags="excel todo">
+          <div class="card-top"><h3>Big To-Do List</h3><span class="pill excel">Excel · .xlsx</span></div>
+          <p><span class="file-badge">Big_To_Do_List.xlsx</span></p>
+          <p>Room-by-room <strong>clean / purge / reorganize</strong> list — <strong>100 rows</strong> on the To-Do List tab, starting with the dining room. Also listed under To-Do Lists, because that's what it is.</p>
+          <p class="next"><strong>Next action:</strong> ask in chat and Dash sends the latest copy — downloaded copies don't update on their own.</p>
+          <div class="meta"><span class="updated">Built Nov 5, 2026</span><span>100 rows</span></div>
+        </article>
+
+        <article class="card" data-tags="excel todo">
+          <div class="card-top"><h3>Birthday &amp; Anniversary List</h3><span class="pill excel">Excel · .xlsx</span></div>
+          <p><span class="file-badge">birthday-anniversary-list.xlsx</span></p>
+          <p>Built from your Facebook friends list. <strong>5 tabs: Master, Family, Friends, Camp, Work.</strong> The four category tabs fill in once categories are assigned on Master.</p>
+          <ul class="checks" data-checks>
+            <li><label><input type="checkbox"><span>Assign categories on the Master sheet (close family / family friends / work / camp)</span></label></li>
+            <li><label><input type="checkbox"><span>Category tabs auto-populated</span></label></li>
+          </ul>
+          <div class="meta"><span class="updated">Built Oct 11, 2026</span><span class="progress" data-progress></span></div>
+        </article>
+
+        <article class="card" data-tags="excel">
+          <div class="card-top"><h3>Buffalo Case Manager — Cases Tracker</h3><span class="pill excel">Excel · .xlsx</span></div>
+          <p><span class="file-badge">Buffalo_Case_Manager.xlsx</span></p>
+          <p>Your work cases tracker. Last refresh Nov 3: <strong>83 cases</strong> in the updated copy. Pairs with the Cases Playbook and Training Guides.</p>
+          <div class="act-row"><a class="act secondary" href="#q-training">Copy the training-files request ↓</a></div>
+          <div class="meta"><span class="updated">Updated Nov 3, 2026</span><span>83 cases</span></div>
+        </article>
+
+        <article class="card" data-tags="excel running">
+          <div class="card-top"><h3>NFL Weekly Picks Workbook</h3><span class="pill excel">Excel · Workbook</span></div>
+          <p>Predictions filled in Thursday mornings, results &amp; accuracy filled in Monday mornings — both runs email the file to your work inbox with a short picks summary in chat. Runs through the Super Bowl (Feb 2027).</p>
+          <div class="act-row"><a class="act secondary" href="#q-nfl">Copy the question ↓</a></div>
+          <div class="meta"><span class="updated">Week 10 delivered</span><span>Thu + Mon runs</span></div>
+        </article>
+
+        <article class="card" data-tags="excel">
+          <div class="card-top"><h3>Training Guides — Combined File (Sheets 00–12)</h3><span class="pill excel">Excel / Word · Sheets 00–12</span></div>
+          <p>The combined training file — sheets <strong>00–12</strong> covering Product Pages, the Training Guide, and the Cases Playbook (sheet 11). Resends with all 4 training files on every update, because downloaded copies don't update.</p>
+          <div class="act-row"><a class="act" href="#q-training">Copy the request ↓</a></div>
+          <div class="meta"><span class="updated">Current as of Oct 29, 2026</span><span>Sheets 00–12</span></div>
+        </article>
+
+        <article class="card" data-tags="excel">
+          <div class="card-top"><h3>Christmas Lists &amp; Shopping Plan</h3><span class="pill excel">Lists · Reference</span></div>
+          <p>Both girls' Christmas lists in one place — Taylor's 18 items and Kelsey's 7 Amazon picks — with the shopping plan alongside (what to hold for Black Friday, what to buy now). The item-by-item shop links live on the Christmas Shopping card in Home &amp; Family.</p>
+          <div class="meta"><span class="updated">Updated Oct 28, 2026</span><span>2 lists + plan</span></div>
+        </article>
+
+      </div>
+    </div>
+  </details>
+
+  <!-- TO-DO LISTS -->
+  <details class="cat" id="todo-lists" open data-cat>
+    <summary><span class="cat-title">To-Do Lists</span><span class="cat-count">Checklists · tab: To-Do Lists</span><span class="chev" aria-hidden="true">▾</span></summary>
+    <div class="cat-body">
+      <p class="cat-note">Tap the <strong>To-Do Lists</strong> tab above to filter the hub down to just the cards with checklists — including Christmas, Camper Insurance, Talc, Kelsey's Road Test, Mod Maintenance, and Inbox Cleanup. The lists below are the standalone ones. Checkboxes here are for this visit only, to help you see progress at a glance.</p>
+      <div class="grid">
+
+        <article class="card" data-tags="todo excel">
+          <div class="card-top"><h3>Big To-Do List — Room by Room</h3><span class="pill todo">To-Do List</span></div>
+          <p>The house list: <strong>clean / purge / reorganize, room by room</strong> — 100 rows, starting with the dining room. Full detail is in the spreadsheet (see Excel Files); this card is the quick view.</p>
+          <ul class="checks" data-checks>
+            <li><label><input type="checkbox"><span>Start with the dining room</span></label></li>
+            <li><label><input type="checkbox"><span>Work room by room — clean, purge, reorganize</span></label></li>
+          </ul>
+          <div class="meta"><span class="updated">Spreadsheet built Nov 5, 2026</span><span class="progress" data-progress></span></div>
+        </article>
+
+        <article class="card" data-tags="todo attention">
+          <div class="card-top"><h3>Needs Your Call — Combined List</h3><span class="pill todo">To-Do List</span></div>
+          <p>The four open calls/decisions from the top of the hub, as one checklist:</p>
+          <ul class="checks" data-checks>
+            <li><label><input type="checkbox"><span>Talc notarization — online notary session</span></label></li>
+            <li><label><input type="checkbox"><span>Camper insurance — call Michael Barends, (716) 873-5600</span></label></li>
+            <li><label><input type="checkbox"><span>Kelsey's road test — book it</span></label></li>
+            <li><label><input type="checkbox"><span>Feature pages — send feedback on all three</span></label></li>
+          </ul>
+          <div class="act-row"><a class="act secondary" href="#waiting-on-you">Jump to Needs your call ↑</a></div>
+          <div class="meta"><span class="updated">Updated Nov 13, 2026</span><span class="progress" data-progress></span></div>
+        </article>
+
+        <article class="card" data-tags="todo">
+          <div class="card-top"><h3>Purchasing “360 Information” Checklist</h3><span class="pill todo">To-Do · Work</span></div>
+          <p>For your Westshore role — supplying Purchasing with job <strong>“360 information.”</strong> This is the one remaining <strong>[TO FILL]</strong> in the Cases Playbook / training guides: the checklist itself still needs your wording for what “360” includes.</p>
+          <ul class="checks" data-checks>
+            <li><label><input type="checkbox"><span>Confirm what the Purchasing “360 information” checklist includes</span></label></li>
+            <li><label><input type="checkbox"><span>Fold it into sheet 11 + the combined file</span></label></li>
+          </ul>
+          <div class="meta"><span class="updated">Waiting on detail</span><span class="progress" data-progress></span></div>
+        </article>
+
+        <article class="card" data-tags="todo running">
+          <div class="card-top"><h3>Weekly Routines — Standing List</h3><span class="pill todo">To-Do List</span></div>
+          <p>The recurring list that runs itself — here so you can see it all at once:</p>
+          <ul class="checks" data-checks>
+            <li><label><input type="checkbox" checked><span>Text checks — noon &amp; 8pm nudges</span></label></li>
+            <li><label><input type="checkbox" checked><span>Sunday 3pm — Kelsey schedule text ready to send</span></label></li>
+            <li><label><input type="checkbox" checked><span>Thu / Mon — NFL picks workbook emailed</span></label></li>
+            <li><label><input type="checkbox" checked><span>Application reply watch — hourly</span></label></li>
+          </ul>
+          <div class="act-row"><a class="act secondary" href="#watches">See Watches &amp; Routines ↑</a></div>
+          <div class="meta"><span class="updated">Running</span><span class="progress" data-progress></span></div>
+        </article>
+
+      </div>
+    </div>
+  </details>
+
   <footer>
     <p><strong>How this page works:</strong> save it to your favorites bar once. When a project gets a new version, this page is updated behind the scenes — same bookmark, latest everything.</p>
-    <p>Last hub update: Friday, November 13, 2026. New project? Just say the word in chat and it gets a card here.</p>
+    <p><strong>Tabs:</strong> Feature Pages = your feature pages (new ones land there) · Landing Pages = every built page · Excel Files = every spreadsheet · To-Do Lists = every checklist. Last hub update: Friday, November 13, 2026. New project, page, spreadsheet, or list? Just say the word in chat and it gets a card here.</p>
   </footer>
 
 </div>
@@ -711,6 +846,8 @@
         cat.style.display = visibleCards.length ? '' : 'none';
         if(visibleCards.length) cat.open = true;
       });
+      var landingIndex = document.getElementById('landing-pages');
+      if(landingIndex) landingIndex.style.display = (f === 'all' || f === 'landing' || f === 'feature' || f === 'live') ? '' : 'none';
       empty.style.display = anyVisible ? 'none' : 'block';
     });
   });
