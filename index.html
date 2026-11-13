@@ -1,0 +1,717 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>Home</title>
+<style>
+  :root{
+    --bg:#f7f3ec; --surface:#fffdf8; --surface2:#efe8da; --ink:#211c15; --muted:#6f6455;
+    --line:#ddd2bf; --accent:#a84e1f; --accent-ink:#fff7ed; --sage:#4f6b4a; --sage-bg:#e6ecdf;
+    --gold:#8a6d1b; --gold-bg:#f3e9c8; --red:#9c3324; --red-bg:#f6ddd6; --blue:#34596b; --blue-bg:#dde8ec;
+    --shadow:0 1px 2px rgba(33,28,21,.06),0 8px 24px rgba(33,28,21,.06);
+    --radius:14px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#16130f; --surface:#211c16; --surface2:#2a241c; --ink:#f1e9db; --muted:#b3a68f;
+      --line:#3d352a; --accent:#e07a3e; --accent-ink:#1d1208; --sage:#a8c39a; --sage-bg:#2a3524;
+      --gold:#e3c86e; --gold-bg:#3a3117; --red:#f0a08f; --red-bg:#3d211b; --blue:#9fc3d4; --blue-bg:#1f303a;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+    }
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+  button,[role="button"],select,summary,input:not([type="checkbox"]){min-height:2.25rem}
+  a{color:var(--accent)}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 18px 56px}
+
+  /* Header */
+  header{padding:34px 0 8px}
+  .date-line{font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  h1{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;font-size:clamp(2rem,6vw,3.1rem);line-height:1.05;margin:.35rem 0 .5rem;font-weight:700;letter-spacing:-.01em}
+  .lede{font-size:1.06rem;color:var(--muted);max-width:42rem;margin:0}
+  .lede strong{color:var(--ink)}
+
+  /* Stats */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0 6px}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 14px 12px;box-shadow:var(--shadow)}
+  .stat b{display:block;font-family:"Iowan Old Style",Georgia,serif;font-size:1.65rem;line-height:1}
+  .stat span{font-size:.8rem;color:var(--muted);font-weight:600}
+  @media (max-width:620px){ .stats{grid-template-columns:1fr 1fr} }
+
+  /* Needs attention */
+  .attention{margin:18px 0 4px;background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow)}
+  .attention h2{margin:0 0 4px;font-size:1rem}
+  .attention p{margin:0 0 10px;color:var(--muted);font-size:.92rem}
+  .attention ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+  .attention li{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:.95rem;padding:8px 0;border-bottom:1px dashed var(--line)}
+  .attention li:last-child{border-bottom:none;padding-bottom:2px}
+  .attention li::before{content:"→";color:var(--accent);font-weight:800;flex:none}
+  .attention li .att-text{flex:1 1 240px}
+
+  /* Action buttons */
+  .act{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-weight:800;font-size:.88rem;line-height:1.2;text-decoration:none;border-radius:999px;padding:9px 14px;min-height:2.5rem;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);white-space:nowrap}
+  .act:hover{text-decoration:underline}
+  .act.secondary{background:var(--surface);color:var(--accent);border-color:var(--line)}
+  .act-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+  .act-row .act{flex:1 1 auto;text-align:center}
+  @media (max-width:520px){ .attention li .act{flex:1 1 100%;text-align:center} }
+
+  /* Filters */
+  .filters{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 4px;position:sticky;top:0;background:var(--bg);padding:10px 0;z-index:5}
+  .filters button{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 14px;font-size:.88rem;font-weight:700;cursor:pointer;min-height:2.25rem}
+  .filters button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  .filters button:focus-visible, a:focus-visible, summary:focus-visible, input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+  /* Sections */
+  details.cat{margin-top:26px;background:transparent}
+  details.cat > summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;padding:12px 4px;border-bottom:2px solid var(--ink);min-height:3rem}
+  details.cat > summary::-webkit-details-marker{display:none}
+  .cat-title{font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif;font-size:1.45rem;font-weight:700;line-height:1.1}
+  .cat-count{font-size:.78rem;font-weight:800;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+  .chev{margin-left:auto;font-size:1.1rem;color:var(--muted);transition:transform .18s ease;flex:none}
+  details.cat:not([open]) .chev{transform:rotate(-90deg)}
+  @media (prefers-reduced-motion: reduce){ .chev{transition:none} }
+  .cat-body{padding:16px 0 4px}
+  .cat-note{color:var(--muted);font-size:.92rem;margin:0 0 14px}
+  .subhead{font-family:"Iowan Old Style",Georgia,serif;font-size:1.12rem;font-weight:700;margin:18px 0 10px}
+  .subhead:first-child{margin-top:2px}
+  .subhead span{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:.78rem;font-weight:800;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;margin-left:6px}
+  .card p.next{color:var(--ink)}
+  .card p.next strong{color:var(--accent)}
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media (max-width:700px){ .grid{grid-template-columns:1fr} }
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px}
+  .card[hidden]{display:none}
+  .card-top{display:flex;align-items:flex-start;gap:10px}
+  .card h3{margin:0;font-size:1.02rem;line-height:1.3;flex:1}
+  .card p{margin:0;font-size:.92rem;color:var(--muted)}
+  .card p strong{color:var(--ink)}
+  .meta{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:.8rem;color:var(--muted);margin-top:auto;padding-top:4px}
+  .meta .updated{font-weight:700}
+  .pill{flex:none;font-size:.7rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:4px 8px;border-radius:999px;white-space:nowrap}
+  .pill.live{background:var(--sage-bg);color:var(--sage)}
+  .pill.waiting{background:var(--gold-bg);color:var(--gold)}
+  .pill.attention{background:var(--red-bg);color:var(--red)}
+  .pill.running{background:var(--blue-bg);color:var(--blue)}
+  .pill.notstarted{background:var(--surface2);color:var(--muted)}
+  .open-link{display:inline-flex;align-items:center;gap:6px;font-weight:800;font-size:.92rem;text-decoration:none;padding:8px 0 2px;min-height:2.25rem}
+  .open-link:hover{text-decoration:underline}
+
+  /* Checklists */
+  .checks{list-style:none;margin:4px 0 0;padding:10px 0 0;border-top:1px dashed var(--line);display:grid;gap:2px}
+  .checks label{display:flex;gap:10px;align-items:flex-start;padding:7px 6px;border-radius:8px;cursor:pointer;font-size:.92rem;min-height:2.25rem}
+  .checks label:hover{background:var(--surface2)}
+  .checks input[type="checkbox"]{width:20px;height:20px;margin:1px 0 0;accent-color:var(--accent);flex:none;cursor:pointer}
+  .checks input:checked + span{color:var(--muted);text-decoration:line-through}
+  .progress{font-size:.8rem;font-weight:800;color:var(--muted)}
+  .bar{height:6px;background:var(--surface2);border-radius:99px;overflow:hidden}
+  .bar i{display:block;height:100%;background:var(--accent);width:0%}
+
+  /* Knock it out */
+  .quick{margin:18px 0 4px;background:var(--sage-bg);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow)}
+  .quick h2{margin:0 0 4px;font-size:1.05rem}
+  .quick p{margin:0 0 12px;color:var(--muted);font-size:.92rem}
+  .quick ul{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media (max-width:700px){ .quick ul{grid-template-columns:1fr} }
+  .quick li{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:.93rem}
+  .quick li .q-text{flex:1 1 180px}
+  .quick li .q-time{display:block;font-size:.78rem;font-weight:800;color:var(--sage);letter-spacing:.04em;text-transform:uppercase;margin-top:2px}
+
+  /* Shop link lists inside cards */
+  .shop-list{list-style:none;margin:2px 0 0;padding:10px 0 0;border-top:1px dashed var(--line);display:grid;gap:2px}
+  .shop-list li{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:6px 0;border-bottom:1px dashed var(--line);font-size:.9rem}
+  .shop-list li:last-child{border-bottom:none}
+  .shop-list li span{flex:1}
+  .shop-list li b{white-space:nowrap;color:var(--ink)}
+  .shop-list a{font-weight:800;white-space:nowrap;text-decoration:none}
+  .shop-list a:hover{text-decoration:underline}
+  .hold-note{background:var(--gold-bg);color:var(--ink);border-radius:10px;padding:10px 12px;font-size:.88rem}
+  .hold-note strong{color:var(--gold)}
+
+  /* Copy & paste questions */
+  .questions{margin:18px 0 4px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+  .questions h2{margin:0 0 6px;font-size:1.2rem;font-family:"Iowan Old Style",Georgia,serif}
+  .q-intro{margin:0 0 6px;color:var(--muted);font-size:.94rem;max-width:44rem}
+  .q-intro strong{color:var(--ink)}
+  .q-group{font-size:.8rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin:18px 0 4px}
+  .q-group span{color:var(--muted);letter-spacing:0;text-transform:none;font-weight:600}
+  .q-list{list-style:none;margin:0;padding:0;counter-reset:q}
+  .q-item{padding:14px 0 4px;border-top:1px dashed var(--line);scroll-margin-top:14px}
+  .q-item:first-child{border-top:none}
+  .q-label{display:block;font-weight:800;font-size:.95rem}
+  ol.q-list .q-label::before{counter-increment:q;content:counter(q) ". ";color:var(--accent)}
+  .q-wording{margin:4px 0 10px;font-size:1rem;line-height:1.45}
+  .copy-row{display:flex;gap:8px;align-items:stretch;flex-wrap:wrap;margin-bottom:10px}
+  .copy-text{flex:1 1 260px;margin:0;background:var(--surface2);border:1px dashed var(--line);border-radius:8px;padding:10px 12px;font-size:.9rem;line-height:1.45}
+  .copy-btn{flex:none;align-self:flex-start;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);border-radius:999px;padding:9px 16px;font-size:.88rem;font-weight:800;cursor:pointer;min-height:2.5rem}
+  .copy-btn:hover{text-decoration:underline}
+  .copy-btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+  .empty-filter{display:none;background:var(--surface);border:1px dashed var(--line);border-radius:var(--radius);padding:18px;text-align:center;color:var(--muted);margin-top:18px}
+  footer{margin-top:40px;border-top:1px solid var(--line);padding-top:16px;color:var(--muted);font-size:.88rem}
+  footer p{margin:0 0 6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="date-line">Friday, November 13, 2026 · Brianca's hub</div>
+    <h1>Everything we're working on, in one place.</h1>
+    <p class="lede">Bookmark this page once — at work or at home — and you'll always land on the latest version. <strong>New pages and updates get added here as we go</strong>, so you never have to hunt for a link again.</p>
+  </header>
+
+  <div class="stats" aria-label="Overview">
+    <div class="stat"><b>27</b><span>Projects tracked</span></div>
+    <div class="stat"><b>2</b><span>Pages live now</span></div>
+    <div class="stat"><b>6</b><span>Waiting on you</span></div>
+    <div class="stat"><b>3</b><span>Watches running</span></div>
+  </div>
+
+  <section class="questions" id="questions" aria-labelledby="questions-h">
+    <h2 id="questions-h">Copy &amp; paste questions</h2>
+    <p class="q-intro">The “Answer in chat” buttons were sending you to a fresh login and an error — so skip them. <strong>Every open question is written out in full right here.</strong> Tap <strong>Copy</strong> on one, paste it into the chat you're already in, and type your answer right after it.</p>
+
+    <h3 class="q-group">Waiting on your answer</h3>
+    <ol class="q-list">
+      <li class="q-item" id="q-talc">
+        <span class="q-label">Talc notarization</span>
+        <p class="q-wording">Are you ready to do the online notary session for your mom's talc case opt-in? It's the only step left — and we'll walk through it together, step by step.</p>
+        <div class="copy-row"><p class="copy-text" id="copy-talc">Talc notarization — ready to do the online notary session? My answer: </p><button type="button" class="copy-btn" data-copy="copy-talc">Copy</button></div>
+      </li>
+      <li class="q-item" id="q-grand">
+        <span class="q-label">Grand Resort deal watch</span>
+        <p class="q-wording">Should the Grand Resort deal watch run with these settings — cheapest upcoming Friday–Sunday rate, no golf, the resort's own package deals, spa only on a really good deal, 2 people in 1 room? A yes or no unblocks it; if something's off, say what to change.</p>
+        <div class="copy-row"><p class="copy-text" id="copy-grand">Grand Resort deal watch — run it with those settings? My answer: </p><button type="button" class="copy-btn" data-copy="copy-grand">Copy</button></div>
+      </li>
+      <li class="q-item" id="q-basil">
+        <span class="q-label">Basil — Finance Assistant salary</span>
+        <p class="q-wording">For the Basil Finance Assistant role in Orchard Park: do you confirm the salary answer, so the application can go out? If you'd rather use a different answer, paste that one instead.</p>
+        <div class="copy-row"><p class="copy-text" id="copy-basil">Basil Finance Assistant — salary answer: confirmed / use this instead: </p><button type="button" class="copy-btn" data-copy="copy-basil">Copy</button></div>
+      </li>
+      <li class="q-item" id="q-feedback">
+        <span class="q-label">Feedback on the three feature pages</span>
+        <p class="q-wording">For each of the three feature pages built Nov 12 — Fun &amp; Creative, Everyday Life Easier, and Money &amp; the Future — what lands, what doesn't, and what should change?</p>
+        <div class="copy-row"><p class="copy-text" id="copy-feedback">Feature pages feedback — Fun &amp; Creative: … · Everyday Life, Easier: … · Money &amp; the Future: …</p><button type="button" class="copy-btn" data-copy="copy-feedback">Copy</button></div>
+      </li>
+      <li class="q-item" id="q-iphone">
+        <span class="q-label">iPhone model</span>
+        <p class="q-wording">What is your iPhone model? It's in Settings → General → About. That unlocks the phone case shopping. (Your watch is already confirmed: Apple Watch SE, 44mm.)</p>
+        <div class="copy-row"><p class="copy-text" id="copy-iphone">My iPhone model is: </p><button type="button" class="copy-btn" data-copy="copy-iphone">Copy</button></div>
+      </li>
+      <li class="q-item" id="q-glint">
+        <span class="q-label">Glint — Chapter by Chapter</span>
+        <p class="q-wording">Should Glint — Chapter by Chapter (Book 2 in the Plated Prisoner series, in the same format as Gild) be started next?</p>
+        <div class="copy-row"><p class="copy-text" id="copy-glint">Glint chapter-by-chapter — start it next? My answer: </p><button type="button" class="copy-btn" data-copy="copy-glint">Copy</button></div>
+      </li>
+    </ol>
+
+    <h3 class="q-group">Paste-ready requests <span>— not questions; copy a line and send it as-is</span></h3>
+    <ul class="q-list">
+      <li class="q-item" id="q-resumes">
+        <span class="q-label">Résumé &amp; cover letter for a job</span>
+        <p class="q-wording">Every role under Job hunt has a tailored résumé and cover letter ready. Copy this line, add the company and role, and send it.</p>
+        <div class="copy-row"><p class="copy-text" id="copy-resumes">Please send my tailored résumé and cover letter for: </p><button type="button" class="copy-btn" data-copy="copy-resumes">Copy</button></div>
+      </li>
+      <li class="q-item" id="q-training">
+        <span class="q-label">Latest training guides</span>
+        <p class="q-wording">The full set — Product Pages, Training Guide, Cases Playbook, and the combined Word file (sheets 00–12) — resent together, all four, every update.</p>
+        <div class="copy-row"><p class="copy-text" id="copy-training">Please send the latest set of all 4 training files: Product Pages, Training Guide, Cases Playbook, and the combined Word file (sheets 00–12).</p><button type="button" class="copy-btn" data-copy="copy-training">Copy</button></div>
+      </li>
+      <li class="q-item" id="q-modfix">
+        <span class="q-label">Sims 4 mod fix walkthrough</span>
+        <p class="q-wording">The one outstanding fix on patch 1.129: Better Exceptions flagged Tralfaz_GhostBusting.package as an invalid tuning mod.</p>
+        <div class="copy-row"><p class="copy-text" id="copy-modfix">Walk me through the Sims 4 mod fix: pull Tralfaz_GhostBusting.package, delete localthumbcache, then reload and confirm the exception is gone.</p><button type="button" class="copy-btn" data-copy="copy-modfix">Copy</button></div>
+      </li>
+      <li class="q-item" id="q-inbox">
+        <span class="q-label">Gmail inbox cleanup status</span>
+        <div class="copy-row"><p class="copy-text" id="copy-inbox">What's the current status of the Gmail inbox cleanup?</p><button type="button" class="copy-btn" data-copy="copy-inbox">Copy</button></div>
+      </li>
+      <li class="q-item" id="q-plaud">
+        <span class="q-label">Plaud NotePin S price watch</span>
+        <div class="copy-row"><p class="copy-text" id="copy-plaud">What's the latest on the Plaud NotePin S price watch?</p><button type="button" class="copy-btn" data-copy="copy-plaud">Copy</button></div>
+      </li>
+      <li class="q-item" id="q-nfl">
+        <span class="q-label">This week's NFL picks</span>
+        <div class="copy-row"><p class="copy-text" id="copy-nfl">Show me this week's NFL picks.</p><button type="button" class="copy-btn" data-copy="copy-nfl">Copy</button></div>
+      </li>
+      <li class="q-item" id="q-texts">
+        <span class="q-label">Text-check nudge times</span>
+        <p class="q-wording">The twice-daily nudges currently run at noon and 8pm.</p>
+        <div class="copy-row"><p class="copy-text" id="copy-texts">Change my text-check nudge times to: </p><button type="button" class="copy-btn" data-copy="copy-texts">Copy</button></div>
+      </li>
+    </ul>
+  </section>
+
+  <section class="quick" aria-labelledby="quick-h">
+    <h2 id="quick-h">Knock it out in 10 minutes</h2>
+    <p>Got a free 10 minutes? Everything here takes 10 minutes or less and is ready to go right now — no asking, no hunting. Where an answer is needed, the exact question is written out in the Copy &amp; paste questions section above.</p>
+    <ul>
+      <li><span class="q-text"><strong>Answer the Grand Resort deal-watch question</strong> — one yes-or-no unblocks the watch.<span class="q-time">About 2 minutes</span></span><a class="act" href="#q-grand">See the question ↓</a></li>
+      <li><span class="q-text"><strong>Send your iPhone model</strong> — it's in Settings → General → About. That unlocks the phone case shopping.<span class="q-time">About 2 minutes</span></span><a class="act" href="#q-iphone">See the question ↓</a></li>
+      <li><span class="q-text"><strong>Confirm the Basil salary answer</strong> — one confirmation and the Finance Assistant application can go out.<span class="q-time">About 2 minutes</span></span><a class="act" href="#q-basil">See the question ↓</a></li>
+      <li><span class="q-text"><strong>Give feedback on the three feature pages</strong> — what lands, what doesn't, what to change.<span class="q-time">About 5–10 minutes</span></span><a class="act" href="#q-feedback">See the question ↓</a></li>
+      <li><span class="q-text"><strong>Order the TADC Pomni &amp; Jax plushes</strong> — $30 each at the official Glitch store; Jax is on the same store. Order soon — Glitch fulfillment is slow.<span class="q-time">About 5 minutes</span></span><a class="act" href="https://glitchproductions.store/products/pomni-plush">Order the plushes →</a></li>
+      <li><span class="q-text"><strong>Book Kelsey's road test</strong> — ready now with permit ID + date of birth + ZIP.<span class="q-time">About 5–10 minutes</span></span><a class="act" href="https://dmv.ny.gov/roadtest">Book at dmv.ny.gov →</a></li>
+    </ul>
+  </section>
+
+  <section class="attention" aria-labelledby="att-h">
+    <h2 id="att-h">Needs your call</h2>
+    <p>The short list — everything else below is either done, running, or waiting on me. Where an answer is needed, the button jumps to the question written out in full above — copy it, paste it in chat, add your answer. No new login.</p>
+    <ul>
+      <li><span class="att-text"><strong>Talc notarization</strong> — just the online notary session left to do. We'll walk through it together in chat.</span><a class="act" href="#q-talc">See the question ↓</a></li>
+      <li><span class="att-text"><strong>Camper insurance</strong> — still no coverage. Call your Allstate agent, Michael Barends, at (716) 873-5600 — the cheat sheet has the VIN and what to say.</span><a class="act" href="tel:+17168735600">Call (716) 873-5600 →</a></li>
+      <li><span class="att-text"><strong>Kelsey's road test</strong> — ready to book now (permit ID + date of birth + ZIP), online or at 1-518-402-2100.</span><a class="act" href="https://dmv.ny.gov/roadtest">Book at dmv.ny.gov →</a><a class="act secondary" href="tel:+15184022100">Call 1-518-402-2100</a></li>
+      <li><span class="att-text"><strong>Three feature pages</strong> — built Nov 12 and waiting on your feedback: what lands, what doesn't, what to change.</span><a class="act" href="#q-feedback">See the question ↓</a></li>
+      <li><span class="att-text"><strong>Grand Resort deal watch</strong> — one question from you still unanswered before it can run properly. It's written out in full above — a quick yes or no unblocks it.</span><a class="act" href="#q-grand">See the question ↓</a></li>
+      <li><span class="att-text"><strong>iPhone model</strong> — needed before I can shop for your phone case. It's in Settings → General → About. Your watch is already confirmed: Apple Watch SE, 44mm.</span><a class="act" href="#q-iphone">See the question ↓</a></li>
+    </ul>
+  </section>
+
+  <div class="filters" role="group" aria-label="Filter projects">
+    <button type="button" data-filter="all" aria-pressed="true">All projects</button>
+    <button type="button" data-filter="attention" aria-pressed="false">Needs attention</button>
+    <button type="button" data-filter="live" aria-pressed="false">Live pages</button>
+    <button type="button" data-filter="running" aria-pressed="false">Running</button>
+  </div>
+  <div class="empty-filter" id="emptyFilter">Nothing matches that filter in this view.</div>
+
+  <!-- JOB HUNT — READY TO GO -->
+  <details class="cat" open data-cat>
+    <summary><span class="cat-title">Job hunt — ready to go</span><span class="cat-count">8 roles</span><span class="chev" aria-hidden="true">▾</span></summary>
+    <div class="cat-body">
+      <p class="cat-note">Everything for each role in one tap: the posting, where it stands, and the next step. Every role below has a <strong>tailored résumé and cover letter ready with Dash in chat</strong> — no file hunting. (The three Nov 12 rejections — Jukebox Health, Celerity, Wpromote — and the closed Ridges to Riffles role aren't listed here; this section is only what's live or ready to send.)</p>
+
+      <h3 class="subhead">Applied — waiting on a reply <span>5 roles</span></h3>
+      <div class="grid">
+
+        <article class="card" data-tags="running">
+          <div class="card-top"><h3>SOLV Energy</h3><span class="pill running">Applied · Live</span></div>
+          <p><strong>Business Operations Coordinator</strong></p>
+          <p>Status: applied, waiting on a reply. The reply watch is automatic — any answer that lands in Gmail gets flagged to your work inbox.</p>
+          <p>Tailored résumé and cover letter are ready with Dash in chat.</p>
+          <p class="next"><strong>Next action:</strong> nothing needed from you right now.</p>
+          <div class="act-row"><a class="act" href="https://remotive.com/remote/jobs/operations/business-operations-coordinator-6428879">View the job posting →</a><a class="act secondary" href="#q-resumes">Copy the résumé request ↓</a></div>
+          <div class="meta"><span class="updated">Updated Nov 13, 2026</span></div>
+        </article>
+
+        <article class="card" data-tags="running">
+          <div class="card-top"><h3>CodePath</h3><span class="pill running">Applied · Live</span></div>
+          <p><strong>Senior People Operations Coordinator</strong></p>
+          <p>Status: applied, waiting on a reply. The reply watch is automatic — any answer that lands in Gmail gets flagged to your work inbox.</p>
+          <p>Tailored résumé and cover letter are ready with Dash in chat.</p>
+          <p class="next"><strong>Next action:</strong> nothing needed from you right now.</p>
+          <div class="act-row"><a class="act" href="https://job-boards.greenhouse.io/codepath/jobs/5280946007">View the job posting →</a><a class="act secondary" href="#q-resumes">Copy the résumé request ↓</a></div>
+          <div class="meta"><span class="updated">Updated Nov 13, 2026</span></div>
+        </article>
+
+        <article class="card" data-tags="running">
+          <div class="card-top"><h3>Canvas Medical</h3><span class="pill running">Applied · Live</span></div>
+          <p><strong>Customer Operations Coordinator</strong></p>
+          <p>Status: applied, waiting on a reply. The reply watch is automatic — any answer that lands in Gmail gets flagged to your work inbox.</p>
+          <p>Tailored résumé and cover letter are ready with Dash in chat.</p>
+          <p class="next"><strong>Next action:</strong> nothing needed from you right now.</p>
+          <div class="act-row"><a class="act" href="https://jobs.ashbyhq.com/canvas-medical/9fa7e1bb-6ba3-4b8d-b6f7-d177b7bf8fc5">View the job posting →</a><a class="act secondary" href="#q-resumes">Copy the résumé request ↓</a></div>
+          <div class="meta"><span class="updated">Updated Nov 13, 2026</span></div>
+        </article>
+
+        <article class="card" data-tags="running">
+          <div class="card-top"><h3>Integer Holdings</h3><span class="pill running">Applied · Live</span></div>
+          <p><strong>Manager, Operations — Alden Plant</strong></p>
+          <p>Status: applied, waiting on a reply. The reply watch is automatic — any answer that lands in Gmail gets flagged to your work inbox.</p>
+          <p>Tailored résumé and cover letter are ready with Dash in chat.</p>
+          <p class="next"><strong>Next action:</strong> nothing needed from you right now.</p>
+          <div class="act-row"><a class="act" href="https://integer.wd1.myworkdayjobs.com/External/job/Alden-Plant-Alden-NY/Manager--Operations_R36223">View the job posting →</a><a class="act secondary" href="#q-resumes">Copy the résumé request ↓</a></div>
+          <div class="meta"><span class="updated">Updated Nov 13, 2026</span></div>
+        </article>
+
+        <article class="card" data-tags="running">
+          <div class="card-top"><h3>Harrow</h3><span class="pill running">Applied · Live</span></div>
+          <p><strong>Marketing Operations Coordinator</strong></p>
+          <p>Status: applied, waiting on a reply. The reply watch is automatic — any answer that lands in Gmail gets flagged to your work inbox.</p>
+          <p>Tailored résumé and cover letter are ready with Dash in chat.</p>
+          <p class="next"><strong>Next action:</strong> nothing needed from you right now.</p>
+          <div class="act-row"><a class="act" href="https://job-boards.greenhouse.io/harrowhealth/jobs/4727766006">View the job posting →</a><a class="act secondary" href="#q-resumes">Copy the résumé request ↓</a></div>
+          <div class="meta"><span class="updated">Updated Nov 13, 2026</span></div>
+        </article>
+
+      </div>
+
+      <h3 class="subhead">Not yet applied — ready to send <span>3 roles</span></h3>
+      <div class="grid">
+
+        <article class="card" data-tags="attention">
+          <div class="card-top"><h3>Stack Overflow</h3><span class="pill waiting">Ready — retry link</span></div>
+          <p><strong>Billing &amp; Accounts Receivable Specialist</strong></p>
+          <p>Status: not applied yet — résumé and cover letter are ready to send.</p>
+          <p>Tailored résumé and cover letter are ready with Dash in chat.</p>
+          <p class="next"><strong>Next action:</strong> retry the apply link — it was down with an error at last check.</p>
+          <div class="act-row"><a class="act" href="https://worqstrap.com/remote-jobs/postings/4298db746a62982e066f6660e8105b2ff53651d2">Retry the apply link →</a><a class="act secondary" href="#q-resumes">Copy the résumé request ↓</a></div>
+          <div class="meta"><span class="updated">Updated Nov 13, 2026</span></div>
+        </article>
+
+        <article class="card" data-tags="attention">
+          <div class="card-top"><h3>Sapphire Recruitment</h3><span class="pill waiting">Ready to send</span></div>
+          <p><strong>Production Supervisor — Clarence</strong></p>
+          <p>Status: not applied yet — résumé and cover letter are ready to send.</p>
+          <p>Tailored résumé and cover letter are ready with Dash in chat.</p>
+          <p class="next"><strong>Next action:</strong> open the posting and apply — everything you need is ready.</p>
+          <div class="act-row"><a class="act" href="https://www.linkedin.com/jobs/view/4489132519/">View the job posting →</a><a class="act secondary" href="#q-resumes">Copy the résumé request ↓</a></div>
+          <div class="meta"><span class="updated">Updated Nov 13, 2026</span></div>
+        </article>
+
+        <article class="card" data-tags="attention">
+          <div class="card-top"><h3>Basil</h3><span class="pill attention">Needs your OK first</span></div>
+          <p><strong>Finance Assistant — Orchard Park</strong></p>
+          <p>Status: not applied yet — held until you confirm one answer.</p>
+          <p>Tailored résumé and cover letter are ready with Dash in chat.</p>
+          <p class="next"><strong>Next action:</strong> confirm the salary answer first — the question is written out in full in the Copy &amp; paste questions at the top — then apply.</p>
+          <div class="act-row"><a class="act" href="#q-basil">See the question ↓</a><a class="act secondary" href="https://www.basilcars.com/basil-jobs/">View the job posting →</a></div>
+          <div class="meta"><span class="updated">Updated Nov 13, 2026</span></div>
+        </article>
+
+      </div>
+    </div>
+  </details>
+
+  <!-- BOOKS & SIMS -->
+  <details class="cat" open data-cat>
+    <summary><span class="cat-title">Books &amp; Sims Builds</span><span class="cat-count">3 projects</span><span class="chev" aria-hidden="true">▾</span></summary>
+    <div class="cat-body">
+      <p class="cat-note">The Plated Prisoner world, built two ways — as Sims lots you can build yourself, and as chapter-by-chapter story pages.</p>
+      <div class="grid">
+
+        <article class="card" data-tags="live">
+          <div class="card-top"><h3>Plated Prisoner Sims Builds</h3><span class="pill live">Live</span></div>
+          <p>All <strong>30 places</strong> from the series as Sims builds — 6 tour clips, gallery sliders, a floor plan for every floor, and build tips, with a “Built it” tracker on each place.</p>
+          <a class="open-link" href="https://muse.ai/s/plated-prisoner-sims-builds-lm6i5myxxxmxyxx/cw1ICuPF4BVZ7eH6qh-k987M1kUxXOxrYVga4uMa09U">Open the builds page →</a>
+          <div class="meta"><span class="updated">Updated Nov 13, 2026</span><span>6 books · 30 places</span></div>
+        </article>
+
+        <article class="card" data-tags="live">
+          <div class="card-top"><h3>Gild — Chapter by Chapter</h3><span class="pill live">Live</span></div>
+          <p>Book 1 walked through in full: <strong>all 40 chapters</strong> plus the closing poem, each with its major scenes and why they matter — 103 scene checkboxes to track where you are.</p>
+          <a class="open-link" href="https://muse.ai/s/gild-chapter-by-chapter-zy6i5t7t9dxh/KW6_nB0FgP6l9Hc6bliiKvVHRKOAbKxkQBLwyuxOLk4">Open Gild →</a>
+          <div class="meta"><span class="updated">Updated Nov 13, 2026</span><span>40 chapters · 103 scenes</span></div>
+        </article>
+
+        <article class="card" data-tags="">
+          <div class="card-top"><h3>Glint — Chapter by Chapter</h3><span class="pill notstarted">Not started</span></div>
+          <p>Book 2 in the same format as Gild — chapter by chapter, major scene by scene. Say the word and it goes next in line.</p>
+          <div class="act-row"><a class="act" href="#q-glint">See the question ↓</a></div>
+          <div class="meta"><span class="updated">Added Nov 13, 2026</span><span>Waiting to start</span></div>
+        </article>
+
+      </div>
+    </div>
+  </details>
+
+  <!-- FEATURE PAGES -->
+  <details class="cat" open data-cat>
+    <summary><span class="cat-title">Your Three Feature Pages</span><span class="cat-count">3 projects</span><span class="chev" aria-hidden="true">▾</span></summary>
+    <div class="cat-body">
+      <p class="cat-note">Built November 12. All three are waiting on your feedback — what lands, what doesn't, what to change.</p>
+      <div class="grid">
+
+        <article class="card" data-tags="attention">
+          <div class="card-top"><h3>Fun &amp; Creative</h3><span class="pill waiting">Feedback pending</span></div>
+          <p>Your creative side in one page — Sims, books, and the projects that are actually for <em>you</em>.</p>
+          <ul class="checks" data-checks>
+            <li><label><input type="checkbox"><span>Look it over</span></label></li>
+            <li><label><input type="checkbox"><span>Send feedback</span></label></li>
+          </ul>
+          <div class="act-row"><a class="act" href="#q-feedback">See the question ↓</a></div>
+          <div class="meta"><span class="updated">Built Nov 12, 2026</span><span class="progress" data-progress></span></div>
+        </article>
+
+        <article class="card" data-tags="attention">
+          <div class="card-top"><h3>Everyday Life, Easier</h3><span class="pill waiting">Feedback pending</span></div>
+          <p>The low-friction page — the routines, reminders, and shortcuts set up to make daily life take less out of you.</p>
+          <ul class="checks" data-checks>
+            <li><label><input type="checkbox"><span>Look it over</span></label></li>
+            <li><label><input type="checkbox"><span>Send feedback</span></label></li>
+          </ul>
+          <div class="act-row"><a class="act" href="#q-feedback">See the question ↓</a></div>
+          <div class="meta"><span class="updated">Built Nov 12, 2026</span><span class="progress" data-progress></span></div>
+        </article>
+
+        <article class="card" data-tags="attention">
+          <div class="card-top"><h3>Money &amp; the Future</h3><span class="pill waiting">Feedback pending</span></div>
+          <p>The longer view — side income, the future you're picturing for the family, and the steps toward it.</p>
+          <ul class="checks" data-checks>
+            <li><label><input type="checkbox"><span>Look it over</span></label></li>
+            <li><label><input type="checkbox"><span>Send feedback</span></label></li>
+          </ul>
+          <div class="act-row"><a class="act" href="#q-feedback">See the question ↓</a></div>
+          <div class="meta"><span class="updated">Built Nov 12, 2026</span><span class="progress" data-progress></span></div>
+        </article>
+
+      </div>
+    </div>
+  </details>
+
+  <!-- WORK & CAREER -->
+  <details class="cat" open data-cat>
+    <summary><span class="cat-title">Work &amp; Career</span><span class="cat-count">1 project</span><span class="chev" aria-hidden="true">▾</span></summary>
+    <div class="cat-body">
+      <div class="grid">
+
+        <article class="card" data-tags="">
+          <div class="card-top"><h3>Work Training Guides</h3><span class="pill live">Current</span></div>
+          <p>The full set, kept current as each day's training lessons come in: <strong>Product Pages, Training Guide, and Cases Playbook</strong>, plus the combined Word file (sheets 00–12). Every update resends all four.</p>
+          <div class="act-row"><a class="act" href="#q-training">Copy the request ↓</a></div>
+          <div class="meta"><span class="updated">Current as of Oct 29, 2026</span><span>4 files</span></div>
+        </article>
+
+      </div>
+    </div>
+  </details>
+
+  <!-- SIMS MODS + INBOX -->
+  <details class="cat" open data-cat>
+    <summary><span class="cat-title">Sims Mods &amp; Inbox</span><span class="cat-count">2 projects</span><span class="chev" aria-hidden="true">▾</span></summary>
+    <div class="cat-body">
+      <div class="grid">
+
+        <article class="card" data-tags="attention">
+          <div class="card-top"><h3>Sims 4 Mod Maintenance</h3><span class="pill waiting">Fix pending</span></div>
+          <p>Game is on <strong>patch 1.129</strong> and the mod tracker is rebuilt (10,794 files). One known fix is still outstanding:</p>
+          <ul class="checks" data-checks>
+            <li><label><input type="checkbox"><span>Pull Tralfaz_GhostBusting.package — flagged as invalid tuning</span></label></li>
+            <li><label><input type="checkbox"><span>Delete localthumbcache after pulling it</span></label></li>
+            <li><label><input type="checkbox"><span>Reload and confirm the exception is gone</span></label></li>
+          </ul>
+          <div class="act-row"><a class="act" href="#q-modfix">Copy the request ↓</a></div>
+          <div class="meta"><span class="updated">Updated Nov 11, 2026</span><span class="progress" data-progress></span></div>
+        </article>
+
+        <article class="card" data-tags="running">
+          <div class="card-top"><h3>Gmail Inbox Cleanup</h3><span class="pill running">Running</span></div>
+          <p>The newest 279 messages are reviewed and <strong>71 clear junk emails are queued to trash Friday, Nov 13 at ~9:40am</strong>. After that, the remaining ~2,700 older messages get worked through in daily batches, newest first, junk only — November mail stays.</p>
+          <ul class="checks" data-checks>
+            <li><label><input type="checkbox"><span>First batch trashed — Fri Nov 13, ~9:40am</span></label></li>
+            <li><label><input type="checkbox"><span>Daily batches underway</span></label></li>
+            <li><label><input type="checkbox"><span>Older inbox fully worked through</span></label></li>
+          </ul>
+          <div class="act-row"><a class="act secondary" href="#q-inbox">Copy the question ↓</a></div>
+          <div class="meta"><span class="updated">Updated Nov 12, 2026</span><span class="progress" data-progress></span></div>
+        </article>
+
+      </div>
+    </div>
+  </details>
+
+  <!-- HOME & FAMILY -->
+  <details class="cat" open data-cat>
+    <summary><span class="cat-title">Home &amp; Family</span><span class="cat-count">6 projects</span><span class="chev" aria-hidden="true">▾</span></summary>
+    <div class="cat-body">
+      <div class="grid">
+
+        <article class="card" data-tags="running">
+          <div class="card-top"><h3>Christmas Shopping</h3><span class="pill running">In progress</span></div>
+          <p>Lists are <strong>in for both girls</strong> — Taylor's 18 items and Kelsey's 7 Amazon picks below, plus Raccoon Island added Oct 28. Every item is one tap from its product page.</p>
+          <p><strong>Kelsey's picks — tap to open on Amazon:</strong></p>
+          <ul class="shop-list">
+            <li><span>KODAK PIXPRO FZ55 digital camera, red</span><a href="https://a.co/d/017uJcuZ">Amazon →</a></li>
+            <li><span>ENZO Ferrari metal sign, 6"×12"</span><a href="https://a.co/d/020vYO8L">Amazon →</a></li>
+            <li><span>Crosses Men's Rose Logo T-Shirt, Small, Black</span><a href="https://a.co/d/02giORR7">Amazon →</a></li>
+            <li><span>Deftones "White Pony" flag / banner, 3×5 ft</span><a href="https://a.co/d/04vgZMmL">Amazon →</a></li>
+            <li><span>AMZGIRL Lash Clusters Kit</span><a href="https://a.co/d/07qEroHr">Amazon →</a></li>
+            <li><span>Deftones "White Pony" vinyl, 2LP</span><a href="https://a.co/d/088dpBlR">Amazon →</a></li>
+            <li><span>Billie Eilish Eau de Parfum, 3.4 oz</span><a href="https://a.co/d/0cJVZi3r">Amazon →</a></li>
+          </ul>
+          <p><strong>Taylor's TADC plushes:</strong> Pomni and Jax, $30 each at the official Glitch store — Jax is on the same store. Order soon, Glitch fulfillment is slow.</p>
+          <div class="act-row"><a class="act" href="https://glitchproductions.store/products/pomni-plush">Order the Pomni plush →</a></div>
+          <p class="hold-note"><strong>Hold for Black Friday (Fri, Nov 27):</strong> the Kodak camera and Billie Eilish perfume above, plus Taylor's drum set, electric guitar bundle, and noise-canceling headphones — those categories get the biggest Black Friday cuts. Everything under ~$40, just buy now.</p>
+          <ul class="checks" data-checks>
+            <li><label><input type="checkbox" checked><span>Taylor's list — received</span></label></li>
+            <li><label><input type="checkbox" checked><span>Kelsey's list — received</span></label></li>
+            <li><label><input type="checkbox"><span>Order Pomni &amp; Jax plushes</span></label></li>
+            <li><label><input type="checkbox"><span>Shopping finished</span></label></li>
+          </ul>
+          <div class="meta"><span class="updated">Updated Nov 13, 2026</span><span class="progress" data-progress></span></div>
+        </article>
+
+        <article class="card" data-tags="attention">
+          <div class="card-top"><h3>Camper Insurance</h3><span class="pill attention">No coverage</span></div>
+          <p>The camper — 2018 Forest River — <strong>still has no insurance coverage</strong>. A one-page call cheat sheet with the VIN and what to say is ready, so the call itself is the only step left: your Allstate agent, <strong>Michael Barends</strong>.</p>
+          <ul class="checks" data-checks>
+            <li><label><input type="checkbox"><span>Make the call (cheat sheet ready)</span></label></li>
+            <li><label><input type="checkbox"><span>Camper added to a policy</span></label></li>
+          </ul>
+          <div class="act-row"><a class="act" href="tel:+17168735600">Call Michael Barends — (716) 873-5600 →</a></div>
+          <div class="meta"><span class="updated">Cheat sheet ready Oct 15, 2026</span><span class="progress" data-progress></span></div>
+        </article>
+
+        <article class="card" data-tags="attention">
+          <div class="card-top"><h3>Talc Case Notarization</h3><span class="pill attention">One step left</span></div>
+          <p>For your mom's talc case, everything is done except the <strong>online notary session</strong> for the opt-in. It's the last step — and the one you've been dreading, which is exactly why it's at the top of the list, not buried. Open chat and we'll walk through it together, step by step.</p>
+          <ul class="checks" data-checks>
+            <li><label><input type="checkbox"><span>Complete the online notary session</span></label></li>
+          </ul>
+          <div class="act-row"><a class="act" href="#q-talc">See the question ↓</a></div>
+          <div class="meta"><span class="updated">Updated Nov 11, 2026</span><span class="progress" data-progress></span></div>
+        </article>
+
+        <article class="card" data-tags="attention">
+          <div class="card-top"><h3>Kelsey's Road Test</h3><span class="pill waiting">Ready to book</span></div>
+          <p>The 5-hour course is done (Oct 14) and reported to the DMV the same day, so the road test <strong>can be booked right now</strong> — online at dmv.ny.gov/roadtest, or by phone at 1-518-402-2100. On test day: the physical MV-278 plus the signed MV-262 50-hour log.</p>
+          <ul class="checks" data-checks>
+            <li><label><input type="checkbox"><span>Book the road test</span></label></li>
+            <li><label><input type="checkbox"><span>MV-278 + signed MV-262 ready for test day</span></label></li>
+          </ul>
+          <div class="act-row"><a class="act" href="https://dmv.ny.gov/roadtest">Book the road test →</a><a class="act secondary" href="tel:+15184022100">Call 1-518-402-2100</a></div>
+          <div class="meta"><span class="updated">Ready since Oct 19, 2026</span><span class="progress" data-progress></span></div>
+        </article>
+
+        <article class="card" data-tags="attention">
+          <div class="card-top"><h3>Watch Band &amp; Phone Case</h3><span class="pill waiting">One answer needed</span></div>
+          <p>Your watch is confirmed from the photo: <strong>Apple Watch SE, 44mm</strong> — bands listed for 42/44/45mm fit, and yours will be breathable (nylon, leather, or metal — no silicone). The one thing still missing is your <strong>iPhone model</strong> for the case: it's in Settings → General → About. Tell me in chat and the shopping can start.</p>
+          <div class="act-row"><a class="act" href="#q-iphone">See the question ↓</a></div>
+          <div class="meta"><span class="updated">Watch confirmed Nov 13, 2026</span><span>SE · 44mm</span></div>
+        </article>
+
+        <article class="card" data-tags="">
+          <div class="card-top"><h3>Mattress — King Replacement</h3><span class="pill live">Matches verified</span></div>
+          <p>Your current bed is your mom's Simmons Beautyrest "Granville Terrace Plush Super Pillow Top." These are the <strong>three verified King-size matches</strong> for that same Plush feel — tap any one to open it at the store:</p>
+          <ul class="shop-list">
+            <li><span>Beautyrest Level Two Plush Pillow Top King — Raymour &amp; Flanigan, sale</span><b>$1,394.10</b><a href="https://www.raymourflanigan.com/mattresses/luxury-pillowtop-mattresses/beautyrest-level-two-plush-pillow-top-466028012">View →</a></li>
+            <li><span>Beautyrest Level One Plush King (<strong>NOT</strong> a pillow top) — Raymour &amp; Flanigan, sale</span><b>$1,214.10</b><a href="https://www.raymourflanigan.com/mattresses/plush-mattresses/beautyrest-level-one-plush-mattress-466127834">View →</a></li>
+            <li><span>Beautyrest Core Level Two Plush Pillow Top King — BedPlanet</span><b>$1,499.99</b><a href="https://bedplanet.com/products/beautyrest-core-level-two-plush-pillow-top-mattress?variant=41072448831573">View →</a></li>
+          </ul>
+          <p class="next"><strong>Next action:</strong> the Level Two Pillow Top at Raymour &amp; Flanigan is the closest match — open it first.</p>
+          <div class="meta"><span class="updated">Verified Oct 17, 2026</span><span>King · Plush</span></div>
+        </article>
+
+      </div>
+    </div>
+  </details>
+
+  <!-- WATCHES -->
+  <details class="cat" open data-cat>
+    <summary><span class="cat-title">Watches &amp; Weekly Routines</span><span class="cat-count">4 projects</span><span class="chev" aria-hidden="true">▾</span></summary>
+    <div class="cat-body">
+      <p class="cat-note">The things ticking along in the background so you don't have to hold them in your head.</p>
+      <div class="grid">
+
+        <article class="card" data-tags="attention running">
+          <div class="card-top"><h3>Grand Resort Deal Watch</h3><span class="pill waiting">Question open</span></div>
+          <p>Your and Trevor's favorite getaway — Warren, Ohio. The watch for an incredible deal (cheapest Fri–Sun, no golf, resort packages, spa only on a really good deal) is set up, but <strong>one question is still unanswered</strong> before it can run the way you want it. It's written out in full in the Copy &amp; paste questions at the top — a yes or no is all it takes.</p>
+          <div class="act-row"><a class="act" href="#q-grand">See the question ↓</a><a class="act secondary" href="https://www.thegrandresort.com">Visit the Grand Resort →</a></div>
+          <div class="meta"><span class="updated">Set up Oct 25, 2026</span><span>2 people · 1 room</span></div>
+        </article>
+
+        <article class="card" data-tags="running">
+          <div class="card-top"><h3>Plaud NotePin S Price Watch</h3><span class="pill running">Running</span></div>
+          <p>Watching the price and flagging a drop worth acting on. Runs <strong>through December 1</strong>.</p>
+          <div class="act-row"><a class="act secondary" href="#q-plaud">Copy the question ↓</a></div>
+          <div class="meta"><span class="updated">Running through Dec 1, 2026</span></div>
+        </article>
+
+        <article class="card" data-tags="running">
+          <div class="card-top"><h3>NFL Weekly Picks</h3><span class="pill running">Running</span></div>
+          <p>Predictions land Thursday mornings and results with accuracy on Monday mornings, both emailed to your work inbox. <strong>Week 10 is delivered.</strong> Runs through the Super Bowl — curiosity only, no gambling.</p>
+          <ul class="checks" data-checks>
+            <li><label><input type="checkbox" checked><span>Week 10 picks delivered</span></label></li>
+            <li><label><input type="checkbox"><span>Week 10 results &amp; accuracy delivered</span></label></li>
+          </ul>
+          <div class="act-row"><a class="act secondary" href="#q-nfl">Copy the question ↓</a></div>
+          <div class="meta"><span class="updated">Updated Nov 12, 2026</span><span class="progress" data-progress></span></div>
+        </article>
+
+        <article class="card" data-tags="running">
+          <div class="card-top"><h3>Text Checks</h3><span class="pill running">Running</span></div>
+          <p>A nudge twice a day — <strong>noon and 8pm</strong> — five minutes to catch anyone waiting on a reply from you.</p>
+          <div class="act-row"><a class="act secondary" href="#q-texts">Copy the request ↓</a></div>
+          <div class="meta"><span class="updated">Running daily</span><span>Noon &amp; 8pm</span></div>
+        </article>
+
+      </div>
+    </div>
+  </details>
+
+  <footer>
+    <p><strong>How this page works:</strong> save it to your favorites bar once. When a project gets a new version, this page is updated behind the scenes — same bookmark, latest everything.</p>
+    <p>Last hub update: Friday, November 13, 2026. New project? Just say the word in chat and it gets a card here.</p>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  // Checklist progress (this visit)
+  document.querySelectorAll('[data-checks]').forEach(function(list){
+    var card = list.closest('.card');
+    var prog = card ? card.querySelector('[data-progress]') : null;
+    var boxes = list.querySelectorAll('input[type="checkbox"]');
+    function update(){
+      var done = 0;
+      boxes.forEach(function(b){ if(b.checked) done++; });
+      if(prog) prog.textContent = done + ' of ' + boxes.length + ' done';
+    }
+    boxes.forEach(function(b){ b.addEventListener('change', update); });
+    update();
+  });
+
+  // Copy buttons in the questions section
+  document.querySelectorAll('[data-copy]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var target = document.getElementById(btn.getAttribute('data-copy'));
+      if(!target) return;
+      var text = target.textContent.trim();
+      function done(){
+        var original = btn.getAttribute('data-label') || btn.textContent;
+        btn.setAttribute('data-label', original);
+        btn.textContent = 'Copied — paste it in chat';
+        setTimeout(function(){ btn.textContent = original; }, 2600);
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(done, function(){ fallback(); });
+      } else { fallback(); }
+      function fallback(){
+        var range = document.createRange();
+        range.selectNodeContents(target);
+        var sel = window.getSelection();
+        sel.removeAllRanges(); sel.addRange(range);
+        try { document.execCommand('copy'); } catch(e) {}
+        done();
+      }
+    });
+  });
+
+  // Filters
+  var buttons = document.querySelectorAll('.filters button');
+  var cards = document.querySelectorAll('.card');
+  var cats = document.querySelectorAll('[data-cat]');
+  var empty = document.getElementById('emptyFilter');
+  buttons.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      buttons.forEach(function(b){ b.setAttribute('aria-pressed','false'); });
+      btn.setAttribute('aria-pressed','true');
+      var f = btn.getAttribute('data-filter');
+      var anyVisible = false;
+      cards.forEach(function(card){
+        var tags = (card.getAttribute('data-tags')||'').split(' ');
+        var show = (f === 'all') || tags.indexOf(f) !== -1;
+        card.hidden = !show;
+        if(show) anyVisible = true;
+      });
+      cats.forEach(function(cat){
+        var visibleCards = cat.querySelectorAll('.card:not([hidden])');
+        cat.style.display = visibleCards.length ? '' : 'none';
+        if(visibleCards.length) cat.open = true;
+      });
+      empty.style.display = anyVisible ? 'none' : 'block';
+    });
+  });
+})();
+</script>
+</body>
+</html>
