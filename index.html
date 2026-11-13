@@ -39,10 +39,17 @@
 
   /* Stats */
   .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0 6px}
-  .stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 14px 12px;box-shadow:var(--shadow)}
+  .stat{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 30px 12px 14px;box-shadow:var(--shadow);display:block;text-decoration:none;color:var(--ink);cursor:pointer}
   .stat b{display:block;font-family:"Iowan Old Style",Georgia,serif;font-size:1.65rem;line-height:1}
   .stat span{font-size:.8rem;color:var(--muted);font-weight:600}
+  .stat::after{content:"↓";position:absolute;top:12px;right:12px;font-size:.85rem;font-weight:800;color:var(--muted);line-height:1}
+  .stat:hover{border-color:var(--accent)}
+  .stat:hover span{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+  .stat:hover::after{color:var(--accent)}
+  .stat:active{transform:translateY(1px)}
+  .stat:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
   @media (max-width:620px){ .stats{grid-template-columns:1fr 1fr} }
+  #projects,#waiting-on-you,#live-pages,#watches{scroll-margin-top:14px}
 
   /* Needs attention */
   .attention{margin:18px 0 4px;background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow)}
@@ -167,11 +174,11 @@
     <p class="lede">Bookmark this page once — at work or at home — and you'll always land on the latest version. <strong>New pages and updates get added here as we go</strong>, so you never have to hunt for a link again.</p>
   </header>
 
-  <div class="stats" aria-label="Overview">
-    <div class="stat"><b>27</b><span>Projects tracked</span></div>
-    <div class="stat"><b>2</b><span>Pages live now</span></div>
-    <div class="stat"><b>6</b><span>Waiting on you</span></div>
-    <div class="stat"><b>3</b><span>Watches running</span></div>
+  <div class="stats" aria-label="Overview — tap a card to jump to that section">
+    <a class="stat" href="#projects" aria-label="27 projects tracked — jump to all projects"><b>27</b><span>Projects tracked</span></a>
+    <a class="stat" href="#live-pages" aria-label="2 pages live now — jump to Books and Sims Builds, where the live pages are"><b>2</b><span>Pages live now</span></a>
+    <a class="stat" href="#waiting-on-you" aria-label="5 waiting on you — jump to Needs your call"><b>5</b><span>Waiting on you</span></a>
+    <a class="stat" href="#watches" aria-label="3 watches running — jump to Watches and Weekly Routines"><b>3</b><span>Watches running</span></a>
   </div>
 
   <section class="questions" id="questions" aria-labelledby="questions-h">
@@ -199,11 +206,6 @@
         <span class="q-label">Feedback on the three feature pages</span>
         <p class="q-wording">For each of the three feature pages built Nov 12 — Fun &amp; Creative, Everyday Life Easier, and Money &amp; the Future — what lands, what doesn't, and what should change?</p>
         <div class="copy-row"><p class="copy-text" id="copy-feedback">Feature pages feedback — Fun &amp; Creative: … · Everyday Life, Easier: … · Money &amp; the Future: …</p><button type="button" class="copy-btn" data-copy="copy-feedback">Copy</button></div>
-      </li>
-      <li class="q-item" id="q-iphone">
-        <span class="q-label">iPhone model</span>
-        <p class="q-wording">What is your iPhone model? It's in Settings → General → About. That unlocks the phone case shopping. (Your watch is already confirmed: Apple Watch SE, 44mm.)</p>
-        <div class="copy-row"><p class="copy-text" id="copy-iphone">My iPhone model is: </p><button type="button" class="copy-btn" data-copy="copy-iphone">Copy</button></div>
       </li>
       <li class="q-item" id="q-glint">
         <span class="q-label">Glint — Chapter by Chapter</span>
@@ -254,7 +256,6 @@
     <p>Got a free 10 minutes? Everything here takes 10 minutes or less and is ready to go right now — no asking, no hunting. Where an answer is needed, the exact question is written out in the Copy &amp; paste questions section above.</p>
     <ul>
       <li><span class="q-text"><strong>Answer the Grand Resort deal-watch question</strong> — one yes-or-no unblocks the watch.<span class="q-time">About 2 minutes</span></span><a class="act" href="#q-grand">See the question ↓</a></li>
-      <li><span class="q-text"><strong>Send your iPhone model</strong> — it's in Settings → General → About. That unlocks the phone case shopping.<span class="q-time">About 2 minutes</span></span><a class="act" href="#q-iphone">See the question ↓</a></li>
       <li><span class="q-text"><strong>Confirm the Basil salary answer</strong> — one confirmation and the Finance Assistant application can go out.<span class="q-time">About 2 minutes</span></span><a class="act" href="#q-basil">See the question ↓</a></li>
       <li><span class="q-text"><strong>Give feedback on the three feature pages</strong> — what lands, what doesn't, what to change.<span class="q-time">About 5–10 minutes</span></span><a class="act" href="#q-feedback">See the question ↓</a></li>
       <li><span class="q-text"><strong>Order the TADC Pomni &amp; Jax plushes</strong> — $30 each at the official Glitch store; Jax is on the same store. Order soon — Glitch fulfillment is slow.<span class="q-time">About 5 minutes</span></span><a class="act" href="https://glitchproductions.store/products/pomni-plush">Order the plushes →</a></li>
@@ -262,7 +263,7 @@
     </ul>
   </section>
 
-  <section class="attention" aria-labelledby="att-h">
+  <section class="attention" id="waiting-on-you" aria-labelledby="att-h">
     <h2 id="att-h">Needs your call</h2>
     <p>The short list — everything else below is either done, running, or waiting on me. Where an answer is needed, the button jumps to the question written out in full above — copy it, paste it in chat, add your answer. No new login.</p>
     <ul>
@@ -271,11 +272,10 @@
       <li><span class="att-text"><strong>Kelsey's road test</strong> — ready to book now (permit ID + date of birth + ZIP), online or at 1-518-402-2100.</span><a class="act" href="https://dmv.ny.gov/roadtest">Book at dmv.ny.gov →</a><a class="act secondary" href="tel:+15184022100">Call 1-518-402-2100</a></li>
       <li><span class="att-text"><strong>Three feature pages</strong> — built Nov 12 and waiting on your feedback: what lands, what doesn't, what to change.</span><a class="act" href="#q-feedback">See the question ↓</a></li>
       <li><span class="att-text"><strong>Grand Resort deal watch</strong> — one question from you still unanswered before it can run properly. It's written out in full above — a quick yes or no unblocks it.</span><a class="act" href="#q-grand">See the question ↓</a></li>
-      <li><span class="att-text"><strong>iPhone model</strong> — needed before I can shop for your phone case. It's in Settings → General → About. Your watch is already confirmed: Apple Watch SE, 44mm.</span><a class="act" href="#q-iphone">See the question ↓</a></li>
     </ul>
   </section>
 
-  <div class="filters" role="group" aria-label="Filter projects">
+  <div class="filters" id="projects" role="group" aria-label="Filter projects">
     <button type="button" data-filter="all" aria-pressed="true">All projects</button>
     <button type="button" data-filter="attention" aria-pressed="false">Needs attention</button>
     <button type="button" data-filter="live" aria-pressed="false">Live pages</button>
@@ -382,7 +382,7 @@
   </details>
 
   <!-- BOOKS & SIMS -->
-  <details class="cat" open data-cat>
+  <details class="cat" id="live-pages" open data-cat>
     <summary><span class="cat-title">Books &amp; Sims Builds</span><span class="cat-count">3 projects</span><span class="chev" aria-hidden="true">▾</span></summary>
     <div class="cat-body">
       <p class="cat-note">The Plated Prisoner world, built two ways — as Sims lots you can build yourself, and as chapter-by-chapter story pages.</p>
@@ -571,11 +571,11 @@
           <div class="meta"><span class="updated">Ready since Oct 19, 2026</span><span class="progress" data-progress></span></div>
         </article>
 
-        <article class="card" data-tags="attention">
-          <div class="card-top"><h3>Watch Band &amp; Phone Case</h3><span class="pill waiting">One answer needed</span></div>
-          <p>Your watch is confirmed from the photo: <strong>Apple Watch SE, 44mm</strong> — bands listed for 42/44/45mm fit, and yours will be breathable (nylon, leather, or metal — no silicone). The one thing still missing is your <strong>iPhone model</strong> for the case: it's in Settings → General → About. Tell me in chat and the shopping can start.</p>
-          <div class="act-row"><a class="act" href="#q-iphone">See the question ↓</a></div>
-          <div class="meta"><span class="updated">Watch confirmed Nov 13, 2026</span><span>SE · 44mm</span></div>
+        <article class="card" data-tags="">
+          <div class="card-top"><h3>Watch Band &amp; Phone Case</h3><span class="pill waiting">Case pick open</span></div>
+          <p>Your watch is confirmed from the photo: <strong>Apple Watch SE, 44mm</strong> — bands listed for 42/44/45mm fit, and yours will be breathable (nylon, leather, or metal — no silicone). Your phone is confirmed too: <strong>iPhone 14 Pro</strong> — so case shopping is unlocked.</p>
+          <p class="next"><strong>Next action:</strong> pick a case for the iPhone 14 Pro — the pick itself is still open.</p>
+          <div class="meta"><span class="updated">Updated Nov 13, 2026</span><span>Watch SE · 44mm · iPhone 14 Pro</span></div>
         </article>
 
         <article class="card" data-tags="">
@@ -595,7 +595,7 @@
   </details>
 
   <!-- WATCHES -->
-  <details class="cat" open data-cat>
+  <details class="cat" id="watches" open data-cat>
     <summary><span class="cat-title">Watches &amp; Weekly Routines</span><span class="cat-count">4 projects</span><span class="chev" aria-hidden="true">▾</span></summary>
     <div class="cat-body">
       <p class="cat-note">The things ticking along in the background so you don't have to hold them in your head.</p>
@@ -683,6 +683,22 @@
         try { document.execCommand('copy'); } catch(e) {}
         done();
       }
+    });
+  });
+
+  // Stat cards: jump to their section, opening it / un-hiding it if needed
+  document.querySelectorAll('.stat').forEach(function(link){
+    link.addEventListener('click', function(){
+      var id = (link.getAttribute('href') || '').slice(1);
+      var target = id ? document.getElementById(id) : null;
+      if(!target) return;
+      // If a project filter is hiding the target section, reset to "All projects" first
+      var cat = target.matches('[data-cat]') ? target : target.closest('[data-cat]');
+      if(cat && (cat.style.display === 'none' || cat.querySelector('.card[hidden]'))){
+        var allBtn = document.querySelector('.filters button[data-filter="all"]');
+        if(allBtn) allBtn.click();
+      }
+      if(target.tagName === 'DETAILS') target.open = true;
     });
   });
 
